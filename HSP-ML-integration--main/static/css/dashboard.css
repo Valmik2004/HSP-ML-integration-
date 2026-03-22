@@ -1,0 +1,50 @@
+/* Custom CSS for Dashboard (Minimal, relying heavily on Tailwind) */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sticky navigation bar */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+/* General card styling for consistency */
+.bg-white {
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Chart container styling */
+.chart-container {
+    position: relative;
+    height: 400px; /* Fixed height for charts */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive adjustments for charts - allows them to fill parent */
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Button styling for period selection */
+.period-btn {
+    transition: all 0.3s ease-in-out;
+}
+
+.period-btn.bg-blue-500 { /* Active state for period button */
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+/* Table styling */
+#pumpLogTableBody tr:nth-child(even) {
+    background-color: #f9fafb; /* Light stripe for even rows */
+}
+#pumpLogTableBody tr:hover {
+    background-color: #f0f4f8; /* Highlight row on hover */
+    transition: background-color 0.2s ease-in-out;
+}

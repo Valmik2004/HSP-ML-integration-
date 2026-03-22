@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HypoSensePredict - Smart Hydroponic Microgreens Cultivation System</title>
+    <meta name="description" content="Revolutionary IoT-powered hydroponic system for optimal microgreens cultivation with real-time monitoring and automated nutrient delivery.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+    <!-- Link to the renamed CSS file -->
+    <link rel="stylesheet" href="static/css/landingpage.css">
+</head>
+<body class="text-white bg-pattern">
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="text-center">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-xl text-secondary">Loading HypoSensePredict...</p>
+        </div>
+    </div>
+
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 glass-nav" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 icon-green rounded-2xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-seedling text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold gradient-text">HypoSensePredict</span>
+                        <p class="text-xs text-muted font-medium">Smart Hydroponics</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-2">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#project" class="nav-link">Project</a>
+                    <a href="#team" class="nav-link">Team</a>
+                    <!-- Updated to point to the Flask /dashboard route -->
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                </div>
+                <button class="md:hidden btn-primary px-4 py-2 rounded-xl">
+                    <i class="fas fa-bars text-white"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative">
+        <div class="particles" id="particles"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="fade-in">
+                <div class="floating mb-5">
+                    <div class="w-32 h-32 icon-green rounded-full flex items-center justify-center mx-auto mb-8 glass-card shadow-2xl">
+                        <i class="fas fa-seedling text-5xl text-white"></i>
+                    </div>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight text-primary">
+                    <span class="gradient-text" id="heroTitle">HypoSensePredict</span>
+                </h1>
+                <p class="text-2xl md:text-3xl mb-6 max-w-5xl mx-auto leading-relaxed text-secondary font-medium">
+                    Revolutionizing Microgreens Cultivation with Smart Hydroponics
+                </p>
+                <p class="text-lg md:text-xl mb-12 max-w-4xl mx-auto text-muted">
+                    Advanced IoT sensors, machine learning algorithms, and automated systems for optimal plant growth
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <!-- Updated to point to the Flask /dashboard route -->
+                    <a href="/dashboard" class="btn-primary text-white px-12 py-5 rounded-2xl text-xl font-bold pulse-green">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        View Dashboard
+                    </a>
+                    <button onclick="scrollToSection('project')" class="glass-card px-12 py-5 rounded-2xl text-xl font-semibold text-secondary hover:text-primary transition-colors">
+                        <i class="fas fa-play mr-3"></i>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="glass-card p-4 rounded-full cursor-pointer" onclick="scrollToSection('about')">
+                <i class="fas fa-chevron-down text-2xl text-accent"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="fade-in text-center mb-20">
+                <h2 class="text-5xl md:text-6xl font-bold mb-8 text-primary">
+                    About <span class="gradient-text">Our Innovation</span>
+                </h2>
+                <p class="text-xl text-secondary max-w-4xl mx-auto leading-relaxed">
+                    HypoSensePredict represents the future of sustainable agriculture, combining cutting-edge technology with environmental consciousness.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="scale-in glass-card rounded-3xl p-8 text-center glass-card-hover">
+                    <div class="w-16 h-16 icon-teal rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-leaf text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Sustainable</h3>
+                    <p class="text-muted leading-relaxed">90% less water usage compared to traditional farming methods</p>
+                    <div class="mt-4 bg-gray-700 rounded-full h-2">
+                        <div class="progress-bar w-[90%]"></div>
+                    </div>
+                </div>
+                
+                <div class="scale-in glass-card rounded-3xl p-8 text-center glass-card-hover">
+                    <div class="w-16 h-16 icon-blue rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-robot text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Automated</h3>
+                    <p class="text-muted leading-relaxed">24/7 monitoring with intelligent decision-making algorithms</p>
+                    <div class="mt-4 bg-gray-700 rounded-full h-2">
+                        <div class="progress-bar w-[95%]"></div>
+                    </div>
+                </div>
+                
+                <div class="scale-in glass-card rounded-3xl p-8 text-center glass-card-hover">
+                    <div class="w-16 h-16 icon-purple rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-chart-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Efficient</h3>
+                    <p class="text-muted leading-relaxed">300% faster growth rate with optimal nutrient delivery</p>
+                    <div class="mt-4 bg-gray-700 rounded-full h-2">
+                        <div class="progress-bar w-[85%]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="project" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="fade-in text-center mb-20">
+                <h2 class="text-5xl md:text-7xl font-bold mb-8 leading-tight text-primary">
+                    Our Project: <br>
+                    <span class="gradient-text">Smart Hydroponic Radish Microgreens</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-green-600 mx-auto mb-8"></div>
+            </div>
+            
+            <div class="slide-in-left glass-card rounded-3xl p-12 max-w-7xl mx-auto mb-20">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-6 text-primary">Revolutionary Hydroponic System</h3>
+                        <p class="text-xl leading-relaxed text-secondary mb-6">
+                            The HydroFarm project revolutionizes radish microgreens cultivation through an automated hydroponic ecosystem. Our innovative solution integrates advanced IoT sensors, machine learning algorithms, and precision automation.
+                        </p>
+                        <p class="text-lg leading-relaxed text-muted mb-8">
+                            Real-time monitoring of temperature, humidity, pH levels, nutrient concentration, and light intensity ensures optimal growing conditions. The intelligent pump system delivers nutrients based on predictive plant needs, maximizing yield while minimizing resource consumption.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-accent stat-number" data-target="24">0</div>
+                                <p class="text-muted">Sensors Active</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-accent stat-number" data-target="99.9">0</div>
+                                <p class="text-muted">% Uptime</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-8">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-secondary">Growth Rate</span>
+                                <span class="text-accent font-bold">+300%</span>
+                            </div>
+                            <div class="bg-gray-700 rounded-full h-3">
+                                <div class="progress-bar w-full h-full rounded-full"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-secondary">Water Efficiency</span>
+                                <span class="text-accent font-bold">90%</span>
+                            </div>
+                            <div class="bg-gray-700 rounded-full h-3">
+                                <div class="progress-bar w-[90%] h-full rounded-full"></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-secondary">Automation Level</span>
+                                <span class="text-accent font-bold">95%</span>
+                            </div>
+                            <div class="bg-gray-700 rounded-full h-3">
+                                <div class="progress-bar w-[95%] h-full rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="scale-in glass-card rounded-3xl p-10 glass-card-hover">
+                    <div class="text-center">
+                        <div class="w-20 h-20 icon-blue rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl">
+                            <i class="fas fa-microchip text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6 text-primary">Advanced IoT Sensors</h3>
+                        <p class="text-lg text-muted leading-relaxed mb-6">
+                            Multi-parameter monitoring system with DHT22 temperature/humidity sensors, pH meters, TDS sensors, and LDR light sensors providing real-time environmental data.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Temperature Range</span>
+                                <span class="text-accent font-semibold">18-25°C</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Humidity Control</span>
+                                <span class="text-accent font-semibold">60-70%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">pH Monitoring</span>
+                                <span class="text-accent font-semibold">5.5-6.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scale-in glass-card rounded-3xl p-10 glass-card-hover">
+                    <div class="text-center">
+                        <div class="w-20 h-20 icon-green rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl">
+                            <i class="fas fa-tint text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6 text-primary">Intelligent Pump System</h3>
+                        <p class="text-lg text-muted leading-relaxed mb-6">
+                            Precision nutrient delivery system with automated dosing pumps, flow sensors, and machine learning algorithms for optimal plant nutrition management.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Flow Rate</span>
+                                <span class="text-accent font-semibold">0.5-2.0 L/min</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Precision</span>
+                                <span class="text-accent font-semibold">±0.1 mL</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Response Time</span>
+                                <span class="text-accent font-semibold">&lt;30 sec</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scale-in glass-card rounded-3xl p-10 glass-card-hover">
+                    <div class="text-center">
+                        <div class="w-20 h-20 icon-purple rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl">
+                            <i class="fas fa-brain text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6 text-primary">AI-Powered Analytics</h3>
+                        <p class="text-lg text-muted leading-relaxed mb-6">
+                            Machine learning algorithms analyze growth patterns, predict optimal harvest times, and provide actionable insights for maximum yield optimization.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Prediction Accuracy</span>
+                                <span class="text-accent font-semibold">94.7%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Data Points</span>
+                                <span class="text-accent font-semibold">10K+/day</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-secondary">Processing Speed</span>
+                                <span class="text-accent font-semibold">&lt;100ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="fade-in text-center mb-20">
+                <h2 class="text-5xl md:text-7xl font-bold mb-8 text-primary">
+                    Meet the <span class="gradient-text">Expert Team</span>
+                </h2>
+                <p class="text-2xl text-secondary font-medium mb-4">The brilliant minds behind HypoSensePredict</p>
+                <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-green-600 mx-auto"></div>
+            </div>
+            
+            <div class="team-grid">
+                <div class="slide-in-left glass-card rounded-3xl p-10 glass-card-hover border-t-4 border-blue-500">
+                    <div class="text-center">
+                        <div class="w-28 h-28 icon-blue rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                            <i class="fas fa-user-tie text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-3 text-primary">Prof. Rinku Sharma</h3>
+                        <p class="text-blue-400 font-bold mb-2 text-xl">Project Mentor</p>
+                        <p class="text-accent font-semibold mb-6">M. Tech</p>
+                        <p class="text-muted leading-relaxed text-lg mb-6">
+                            provided expert guidance, insightful feedback, and continuous support throughout the project lifecycle, playing a crucial role in shaping our approach and solutions.
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-linkedin text-blue-400"></i>
+                            </div>
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in glass-card rounded-3xl p-10 glass-card-hover border-t-4 border-green-500">
+                    <div class="text-center">
+                        <div class="w-28 h-28 icon-green rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                            <i class="fas fa-laptop-code text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-3 text-primary">Tejasgiri Gosavi</h3>
+                        <p class="text-green-400 font-bold mb-2 text-xl">Project Lead & Backend Developer</p>
+                        <p class="text-accent font-semibold mb-6">B.Tech Computer Engineering</p>
+                        <p class="text-muted leading-relaxed text-lg mb-6">
+                            Tejasgiri led the project, spearheading the backend development, ESP code implementation, and crucial research. He was instrumental in setting up the foundational backend infrastructure, managing data flow, and contributing to the basic frontend structure, ensuring seamless integration across all system components.
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-github text-gray-400"></i>
+                            </div>
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-linkedin text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-in-right glass-card rounded-3xl p-10 glass-card-hover border-t-4 border-green-500">
+                    <div class="text-center">
+                        <div class="w-28 h-28 icon-green rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                            <i class="fas fa-microchip text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-3 text-primary">Chaitanya Dusane</h3>
+                        <p class="text-green-400 font-bold mb-2 text-xl">Hardware & Embedded Systems, Frontend Developer</p>
+                        <p class="text-accent font-semibold mb-6">B.Tech Computer Engineering</p>
+                        <p class="text-muted leading-relaxed text-lg mb-6">
+                            Chaitanya was responsible for the complete project setup, including the hardware and component integration, intricate connections, and rigorous hardware testing. He also took charge of creating the entire frontend interface and played a vital role in testing the ESP code and IoT functionalities.
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-arduino text-teal-400"></i>
+                            </div>
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-linkedin text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-in-left glass-card rounded-3xl p-10 glass-card-hover border-t-4 border-green-500">
+                    <div class="text-center">
+                        <div class="w-28 h-28 icon-green rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                            <i class="fas fa-user-graduate text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-3 text-primary">Valmik Patil</h3>
+                        <p class="text-green-400 font-bold mb-2 text-xl">Research & Documentation</p>
+                        <p class="text-accent font-semibold mb-6">B.Tech Computer Engineering</p>
+                        <p class="text-muted leading-relaxed text-lg mb-6">
+                            Valmik focused on comprehensive research, meticulously preparing project documentation, the final project report, and contributing significantly to the research paper. His efforts ensured the project's academic and technical aspects were well-supported and clearly articulated.
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fas fa-file-alt text-gray-400"></i>
+                            </div>
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-researchgate text-green-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in glass-card rounded-3xl p-10 glass-card-hover border-t-4 border-purple-500">
+                    <div class="text-center">
+                        <div class="w-28 h-28 icon-purple rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                            <i class="fas fa-brain text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-3 text-primary">Altamash Faraz</h3>
+                        <p class="text-purple-400 font-bold mb-2 text-xl">N/A</p>
+                        <p class="text-accent font-semibold mb-6">B.Tech Computer Engineering</p>
+                        <p class="text-muted leading-relaxed text-lg mb-6">
+                            Did not contribute to the project.
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-python text-yellow-400"></i>
+                            </div>
+                            <div class="glass-card p-2 rounded-lg">
+                                <i class="fab fa-kaggle text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Removed the dashboard section from landingpage.html -->
+    <!-- This section will be handled by dashboard.html after user login -->
+
+    <footer class="py-16 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-4 mb-8">
+                    <div class="w-16 h-16 icon-green rounded-2xl flex items-center justify-center shadow-xl">
+                        <i class="fas fa-seedling text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-4xl font-bold gradient-text">HypoSensePredict</span>
+                        <p class="text-muted text-sm">Smart Hydroponics Technology</p>
+                    </div>
+                </div>
+                <p class="text-muted mb-8 text-xl font-medium max-w-2xl mx-auto">
+                    Pioneering the future of sustainable agriculture through intelligent automation and precision farming technologies.
+                </p>
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="glass-card p-4 rounded-2xl text-muted hover:text-green-400 transition-all duration-300 hover:scale-110">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                    <a href="#" class="glass-card p-4 rounded-2xl text-muted hover:text-blue-400 transition-all duration-300 hover:scale-110">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="#" class="glass-card p-4 rounded-2xl text-muted hover:text-blue-400 transition-all duration-300 hover:scale-110">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="#" class="glass-card p-4 rounded-2xl text-muted hover:text-red-400 transition-all duration-300 hover:scale-110">
+                        <i class="fab fa-youtube text-2xl"></i>
+                    </a>
+                </div>
+                <div class="border-t border-white/10 pt-8">
+                    <p class="text-gray-500 text-lg">© 2025 HypoSensePredict. All rights reserved. | Built with ❤️ for sustainable agriculture</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link to the renamed JS file -->
+    <script src="static/js/landingpage.js"></script>
+</body>
+</html>

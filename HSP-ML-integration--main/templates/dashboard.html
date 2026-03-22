@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HydroSense Predict</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="font-inter bg-gray-100 text-gray-800">
+    <nav class="bg-gradient-to-r from-green-500 to-blue-600 p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/dashboard" class="text-white text-2xl font-bold rounded-md px-3 py-1 hover:bg-white hover:text-green-600 transition duration-300">
+                HydroSense Predict Dashboard
+            </a>
+            <div class="flex items-center space-x-4">
+                <span id="systemStatus" class="px-3 py-1 rounded-full text-sm font-semibold text-white bg-gray-500">System Status: Checking...</span>
+                <span class="text-white text-lg">Welcome, {{ username }}!</span>
+                <a href="/logout" class="bg-red-500 text-white px-5 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-8">
+        <h1 class="text-4xl font-extrabold text-green-700 mb-8 text-center">Your Hydroponics Overview</h1>
+
+        <!-- Latest Sensor Readings & System Status -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Current Readings & System Status</h2>
+            <div id="latestReadings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 text-center">
+                <div class="bg-blue-50 p-6 rounded-xl shadow-md">
+                    <i class="fas fa-thermometer-half text-blue-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">Temperature (Dhule)</p>
+                    <p class="text-3xl font-bold text-blue-800" id="tempValue">N/A °C</p>
+                </div>
+                <div class="bg-indigo-50 p-6 rounded-xl shadow-md">
+                    <i class="fas fa-tint text-indigo-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">Water Level</p>
+                    <p class="text-3xl font-bold text-indigo-800" id="waterLevelValue">N/A</p>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-xl shadow-md">
+                    <i class="fas fa-sun text-yellow-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">LDR Reading</p>
+                    <p class="text-3xl font-bold text-yellow-800" id="ldrValue">N/A</p>
+                </div>
+                <div class="bg-purple-50 p-6 rounded-xl shadow-md">
+                    <i class="fas fa-cloud-sun text-purple-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">Humidity (Dhule)</p>
+                    <p class="text-3xl font-bold text-purple-800" id="humidityValue">N/A %</p>
+                </div>
+                <div class="bg-green-50 p-6 rounded-xl shadow-md">
+                    <i class="fas fa-clock text-green-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">Last Sensor Update</p>
+                    <p class="text-xl font-bold text-green-800" id="lastUpdated">N/A</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md col-span-full xl:col-span-1">
+                    <i class="fas fa-pump-medical text-gray-600 text-4xl mb-3"></i>
+                    <p class="text-xl font-semibold text-gray-700">Current Pump State</p>
+                    <p class="text-3xl font-bold" id="currentPumpState">N/A</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ML Prediction Section -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Machine Learning Predictions</h2>
+            <p class="text-gray-600 mb-6 text-center">
+                Predictions below use the latest sensor data from your ESP32 and live Dhule weather.
+                Only provide additional required parameters.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Yield Prediction -->
+                <div class="p-6 rounded-xl shadow-md bg-pink-50">
+                    <h3 class="text-2xl font-semibold text-pink-700 mb-4">Predict Yield</h3>
+                    <form id="yieldPredictForm" class="space-y-4">
+                        <div>
+                            <label for="yield_cycle_number" class="block text-md font-medium text-gray-700">Cycle Number:</label>
+                            <input type="number" id="yield_cycle_number" name="cycle_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required>
+                        </div>
+                        <div>
+                            <label for="yield_day_of_cycle_mean" class="block text-md font-medium text-gray-700">Day of Cycle (Mean):</label>
+                            <input type="number" id="yield_day_of_cycle_mean" name="day_of_cycle_mean" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required>
+                        </div>
+                        <div>
+                            <label for="yield_hour_of_day_mean" class="block text-md font-medium text-gray-700">Hour of Day (Mean):</label>
+                            <input type="number" id="yield_hour_of_day_mean" name="hour_of_day_mean" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition duration-200">Get Yield Prediction</button>
+                    </form>
+                    <p id="yieldResult" class="mt-4 text-xl font-bold text-center"></p>
+                </div>
+
+                <!-- Pump Prediction -->
+                <div class="p-6 rounded-xl shadow-md bg-blue-50">
+                    <h3 class="text-2xl font-semibold text-blue-700 mb-4">Predict Pump Action</h3>
+                    <p class="text-gray-700 mb-4">Prediction uses current temperature, humidity, water level, LDR, and hour of day.</p>
+                    <button id="predictPumpBtn" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition duration-200">Get Pump Prediction</button>
+                    <p id="pumpResult" class="mt-4 text-xl font-bold text-center"></p>
+                </div>
+
+                <!-- Anomaly Prediction -->
+                <div class="p-6 rounded-xl shadow-md bg-red-50">
+                    <h3 class="text-2xl font-semibold text-red-700 mb-4">Detect Anomaly</h3>
+                    <p class="text-gray-700 mb-4">Prediction uses current sensor data and requires manual input for pump state/reason.</p>
+                    <form id="anomalyPredictForm" class="space-y-4">
+                        <div>
+                            <label for="anomaly_pump_state" class="block text-md font-medium text-gray-700">Pump State (0=OFF, 1=ON):</label>
+                            <input type="number" id="anomaly_pump_state" name="pump_state" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500" min="0" max="1" required>
+                        </div>
+                        <div>
+                            <label for="anomaly_pump_reason" class="block text-md font-medium text-gray-700">Pump Reason:</label>
+                            <select id="anomaly_pump_reason" name="pump_reason" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500" required>
+                                <option value="N/A">N/A (No specific reason)</option>
+                                <option value="Pump turned ON">Pump turned ON</option>
+                                <option value="Pump turned OFF - Max water level reached">Pump turned OFF - Max water level reached</option>
+                                <option value="Pump turned OFF - Safety timeout">Pump turned OFF - Safety timeout</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-200">Check for Anomaly</button>
+                    </form>
+                    <p id="anomalyResult" class="mt-4 text-xl font-bold text-center"></p>
+                </div>
+
+                <!-- Harvest Prediction -->
+                <div class="p-6 rounded-xl shadow-md bg-green-50">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-4">Predict Harvest Time</h3>
+                    <p class="text-gray-700 mb-4">Prediction uses current temperature, humidity, water level, LDR, and hour of day.</p>
+                    <form id="harvestPredictForm" class="space-y-4">
+                        <div>
+                            <label for="harvest_cycle_number" class="block text-md font-medium text-gray-700">Cycle Number:</label>
+                            <input type="number" id="harvest_cycle_number" name="cycle_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500" required>
+                        </div>
+                        <div>
+                            <label for="harvest_day_of_cycle_mean" class="block text-md font-medium text-gray-700">Day of Cycle (Mean):</label>
+                            <input type="number" id="harvest_day_of_cycle_mean" name="day_of_cycle_mean" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500" required>
+                        </div>
+                        <div>
+                            <label for="harvest_hour_of_day_mean" class="block text-md font-medium text-gray-700">Hour of Day (Mean):</label>
+                            <input type="number" id="harvest_hour_of_day_mean" name="hour_of_day_mean" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200">Get Harvest Prediction</button>
+                    </form>
+                    <p id="harvestResult" class="mt-4 text-xl font-bold text-center"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historical Data Charts -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Historical Sensor Data</h2>
+            <div class="flex justify-center space-x-4 mb-6">
+                <button class="period-btn bg-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-300 transition duration-200" data-period="12h">Last 12 Hours</button>
+                <button class="period-btn bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition duration-200" data-period="24h">Last 24 Hours</button>
+                <button class="period-btn bg-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-300 transition duration-200" data-period="7d">Last 7 Days</button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="chart-container bg-gray-50 p-6 rounded-xl shadow-md">
+                    <canvas id="waterLevelChart"></canvas>
+                </div>
+                <div class="chart-container bg-gray-50 p-6 rounded-xl shadow-md">
+                    <canvas id="ldrChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pump Logs -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Pump Activity Logs</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-xl shadow-md">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left rounded-tl-xl">Timestamp (IST)</th>
+                            <th class="py-3 px-6 text-left">Pump State</th>
+                            <th class="py-3 px-6 text-left">Reason</th>
+                            <th class="py-3 px-6 text-left rounded-tr-xl">Duration (seconds)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pumpLogTableBody" class="text-gray-600 text-sm font-light">
+                        <!-- Pump logs will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-6 text-center mt-10">
+        <p>&copy; 2024 HydroSense Predict. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

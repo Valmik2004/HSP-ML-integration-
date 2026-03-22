@@ -1,0 +1,8 @@
+Flask
+python-dotenv
+pymongo
+paho-mqtt
+requests
+scikit-learn
+pandas
+gunicorn # For production deployment
